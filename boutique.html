@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boutique - Ton Site de Formations</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <header>
+        <div class="logo"><img src="images/logo.png"alt="logode l'entreprise">Nawou academie</div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Accueil</a></li>
+                <li><a href="boutique.html">Boutique</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="products-list">
+            <h1>Toutes nos formations et ebooks</h1>
+            <div class="product-grid">
+                <div class="product-card">
+                    <img src="images/formation-ecommerce.jpg" alt="Formation E-commerce Chine/Nigeria">
+                    <h3>Formation E-commerce Chine/Nigeria</h3>
+                    <p>Apprends à acheter et vendre efficacement des produits en ligne en Afrique.</p>
+                    <span>50 000 XAF</span>
+                  <form class="lygos-form">
+    <input type="hidden" name="product-name" value="Formation E-commerce Chine/Nigeria">
+    <button type="submit" class="cta-button">Acheter</button>
+</form>
+                </div>
+                <div class="product-card">
+                    <img src="images/ebook-ia.jpg" alt="Ebook Maîtriser l'IA au quotidien">
+                    <h3>Ebook : Maîtriser l'IA au quotidien</h3>
+                    <p>Boostez votre productivité avec les meilleurs outils d'intelligence artificielle.</p>
+                    <span>15 000 XAF</span>
+<form class="lygos-form">
+    <input type="hidden" name="product-name" value="[Maîtriser l'IA au quotidien]">
+    <button type="submit" class="cta-button">Acheter</button>
+</form>
+                </div>
+                 <div class="product-card">
+                    <img src="images/formation-produits de nettoyage.jpg" alt="Formation sur la production de détergents">
+                    <h3>Formation : Fabrication de produits de nettoyage</h3>
+                    <p>Apprends à fabriquer des savons et détergents de qualité.</p>
+                    <span>40 000 XAF</span>
+<form class="lygos-form">
+    <input type="hidden" name="product-name" value="[Fabrication de produits de nettoyage]">
+    <button type="submit" class="cta-button">Acheter</button>
+</form>
+                </div>
+                 <div class="product-card">
+                    <img src="images/formation-élevage de poulets de chair.jpg" alt="Formation sur l'élevage de poulets">
+                    <h3>Formation : Élevage de poulets de chair</h3>
+                    <p>Toutes les étapes pour réussir ton élevage, de A à Z.</p>
+                    <span>35 000 XAF</span>
+<form class="lygos-form">
+    <input type="hidden" name="product-name" value="[Élevage de poulets de chair]">
+    <button type="submit" class="cta-button">Acheter</button>
+</form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Ton Site de Formations. Tous droits réservés.</p>
+    </footer>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+        const lygosForms = document.querySelectorAll('.lygos-form');
+        const lygosPublicKey = 'TA_CLE_API_PUBLIQUE_ICI';
+
+        lygosForms.forEach(form => {
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                const productName = form.querySelector('input[name="product-name"]').value;
+                const productPrice = 50000; // Tu peux modifier ce prix pour chaque produit
+
+                console.log(`Préparation du paiement pour le produit : ${productName}`);
+
+                const lygosCreatePaymentUrl = 'https://api.lygosapp.com/api/v1/payments/create-checkout-session';
+
+                const transactionDetails = {
+                    key: lygosPublicKey,
+                    amount: productPrice,
+                    currency: 'XAF',
+                    description: `Achat de : ${productName}`,
+                    redirect_url: 'https://tonsite.com/confirmation.html',
+                    customer: {
+                        first_name: 'John',
+                        last_name: 'Doe',
+                        email: 'john.doe@example.com',
+                        phone_number: '237612345678'
+                    }
+                };
+
+                try {
+                    const response = await fetch(lygosCreatePaymentUrl, {
+                        method: 'POST',
+                        headers: { 
+                            'Content-Type': 'application/json' 
+                        },
+                        body: JSON.stringify(transactionDetails),
+                    });
+
+                    const data = await response.json();
+
+                    if (data.status === 'success') {
+                        window.location.href = data.data.checkout_url;
+                    } else {
+                        alert('Erreur lors de la création du paiement. ' + data.message);
+                        console.error('Erreur API :', data.message);
+                    }
+
+                } catch (error) {
+                    alert('Une erreur est survenue lors de la communication avec Lygos.');
+                    console.error('Erreur de connexion :', error);
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>
